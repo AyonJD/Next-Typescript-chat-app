@@ -13,12 +13,14 @@ import Link from "next/link";
 import CustomTextField from "../../../src/components/forms/theme-elements/CustomTextField";
 
 interface loginType {
+  handleFunc: (e: any) => void;
+  submitFunc: () => void;
   title?: string;
   subtitle?: JSX.Element | JSX.Element[];
   subtext?: JSX.Element | JSX.Element[];
 }
 
-const AuthLogin = ({ title, subtitle, subtext }: loginType) => (
+const AuthLogin = ({handleFunc,submitFunc, title, subtitle, subtext }: loginType) => (
   <>
     {title ? (
       <Typography fontWeight="700" variant="h2" mb={1}>
@@ -34,12 +36,12 @@ const AuthLogin = ({ title, subtitle, subtext }: loginType) => (
           variant="subtitle1"
           fontWeight={600}
           component="label"
-          htmlFor="username"
+          htmlFor="username_or_email"
           mb="5px"
         >
-          Username
+          Username or Email
         </Typography>
-        <CustomTextField variant="outlined" fullWidth />
+        <CustomTextField name="username_or_email" handleChange={handleFunc} variant="outlined" fullWidth />
       </Box>
       <Box mt="25px">
         <Typography
@@ -51,7 +53,7 @@ const AuthLogin = ({ title, subtitle, subtext }: loginType) => (
         >
           Password
         </Typography>
-        <CustomTextField type="password" variant="outlined" fullWidth />
+        <CustomTextField handleChange={handleFunc} name="password" type="password" variant="outlined" fullWidth />
       </Box>
       <Stack
         justifyContent="space-between"
@@ -84,8 +86,7 @@ const AuthLogin = ({ title, subtitle, subtext }: loginType) => (
         variant="contained"
         size="large"
         fullWidth
-        component={Link}
-        href="/"
+        onClick={submitFunc}
         type="submit"
       >
         Sign In

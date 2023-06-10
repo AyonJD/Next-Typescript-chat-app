@@ -1,5 +1,5 @@
 import Link  from 'next/link';
-import type { ReactElement } from 'react';
+import { useState, type ReactElement } from 'react';
 import { Grid, Box, Card, Stack, Typography } from '@mui/material';
 import BlankLayout from '../../../src/layouts/blank/BlankLayout';
 
@@ -7,10 +7,28 @@ import BlankLayout from '../../../src/layouts/blank/BlankLayout';
 import PageContainer from '../../../src/components/container/PageContainer';
 import Logo from '../../../src/layouts/full/shared/logo/Logo';
 import AuthLogin from '../auth/AuthLogin';
+import { UserApi } from '../../../Api/user.api';
 
 
 const Login2 = () => {
+  const [input, setInput] = useState({
+    username_or_email: '',
+    password: ''
+})
+
+const handleChange = (e: any) => {
+    setInput({
+        ...input,
+        [e.target.name]: e.target.value
+    })
+  }
   
+  const handleSubmit = async () => { 
+    console.log(input)
+    const responseToken = await UserApi.loginUser(input);
+    console.log(responseToken);
+  }
+
   return (
     <PageContainer title="Login" description="this is Login page">
       <Box
@@ -44,6 +62,8 @@ const Login2 = () => {
                 <Logo />
               </Box>
               <AuthLogin
+                handleFunc={handleChange}
+                submitFunc={handleSubmit}
                 subtext={
                   <Typography variant="subtitle1" textAlign="center" color="textSecondary" mb={1}>
                     Your Social Campaigns
