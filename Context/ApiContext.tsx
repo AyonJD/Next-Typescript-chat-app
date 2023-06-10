@@ -1,16 +1,22 @@
 import React, { createContext, ReactNode, useEffect, useState } from 'react';
+import { excludeCurrentUser, loggedInUser } from '../Api/user.api';
+import { IUserResponse } from '../Interface/user.interface';
 
 interface ApiContextProps {
   data: {
     token: string;
-    fetchToken: () => Promise<void>;
+    _retriveData: () => Promise<void>;
+    loggedInUserData: IUserResponse | null;
+    excludeCurrentUserData: IUserResponse | null;
   };
 }
 
 export const ApiContext = createContext<ApiContextProps>({
   data: {
     token: '',
-    fetchToken: () => Promise.resolve(),
+    _retriveData: () => Promise.resolve(),
+    loggedInUserData: null,
+    excludeCurrentUserData: null,
   },
 });
 
@@ -22,21 +28,32 @@ export const ApiContextProvider: React.FC<ApiContextProviderProps> = ({
   children,
 }) => {
   const [token, setToken] = useState('');
+  const [loggedInUserData, setLoggedInUserData] = useState<IUserResponse | null>(null);
+  const [excludeCurrentUserData, setExcludeCurrentUserData] = useState<IUserResponse | null>(null);
 
-  const fetchToken = async () => {
+  const _retriveData = async () => {
     const storedToken = localStorage.getItem('chat_app_token');
     if (storedToken) {
       setToken(storedToken);
+      const loggedInUserResult: IUserResponse = await loggedInUser(storedToken);
+      setLoggedInUserData(loggedInUserResult);
+
+      if (loggedInUserResult.success) {
+        const excludeCurrentUserResult = await excludeCurrentUser(loggedInUserResult.result._id as string);
+        setExcludeCurrentUserData(excludeCurrentUserResult);
+      }
     }
   };
 
   useEffect(() => {
-    fetchToken();
+    _retriveData();
   }, []);
 
   const data = {
     token,
-    fetchToken,
+    _retriveData,
+    loggedInUserData,
+    excludeCurrentUserData,
   };
 
   return (

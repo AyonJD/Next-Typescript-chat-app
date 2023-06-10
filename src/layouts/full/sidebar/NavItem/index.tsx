@@ -16,7 +16,7 @@ type NavGroup = {
   id?: string;
   navlabel?: boolean;
   subheader?: string;
-  title?: string;
+  username?: string;
   icon?: any;
   href?: any;
   onClick?: React.MouseEvent<HTMLButtonElement, MouseEvent>;

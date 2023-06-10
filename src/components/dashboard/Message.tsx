@@ -4,7 +4,7 @@ import { useContext } from 'react';
 import { ApiContext } from '../../../Context/ApiContext';
 
 const Message = () => {
-    // const { data } = useContext(ApiContext);
+    const { data } = useContext(ApiContext);
     
     return (
         <Card title="Users chat" >
