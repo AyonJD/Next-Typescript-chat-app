@@ -1,13 +1,34 @@
 import type { ReactElement } from 'react';
+import  {useState} from 'react';
 import { Grid, Box, Card, Typography, Stack } from '@mui/material';
 import Link  from 'next/link';
 import PageContainer from '../../../src/components/container/PageContainer';
 import Logo from '../../../src/layouts/full/shared/logo/Logo';
 import AuthRegister from '../auth/AuthRegister';
 import BlankLayout from '../../../src/layouts/blank/BlankLayout';
+import { UserApi } from '../../../Api/user.api';
 
-const Register2 = () => (
-  <PageContainer title="Register" description="this is Register page">
+const Register2 = () => {
+  const [input, setInput] = useState({
+    username: '',
+    email: '',
+    password: ''
+})
+
+const handleChange = (e: any) => {
+    setInput({
+        ...input,
+        [e.target.name]: e.target.value
+    })
+  }
+  
+  const handleSubmit = async () => { 
+    const responseToken = await UserApi.createUser(input);
+    console.log(responseToken);
+  }
+
+  return (
+    <PageContainer title="Register" description="this is Register page">
     <Box
       sx={{
         position: 'relative',
@@ -38,7 +59,9 @@ const Register2 = () => (
             <Box display="flex" alignItems="center" justifyContent="center">
               <Logo />
             </Box>
-            <AuthRegister
+              <AuthRegister
+                handleFunc={handleChange}
+                submitFunc={handleSubmit}
               subtext={
                 <Typography variant="subtitle1" textAlign="center" color="textSecondary" mb={1}>
                   Your Social Campaigns
@@ -49,7 +72,7 @@ const Register2 = () => (
                   <Typography color="textSecondary" variant="h6" fontWeight="400">
                     Already have an Account?
                   </Typography>
-                  <Typography 
+                  <Typography
                     component={Link}
                     href="/authentication/login"
                     fontWeight="500"
@@ -67,8 +90,9 @@ const Register2 = () => (
         </Grid>
       </Grid>
     </Box>
-  </PageContainer>
-);
+    </PageContainer>
+  )
+};
 
 export default Register2;
 

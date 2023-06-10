@@ -6,9 +6,11 @@ import PageContainer from '../src/components/container/PageContainer';
 import FullLayout from '../src/layouts/full/FullLayout';
 import Message from '../src/components/dashboard/Message';
 import MyInfo from '../src/components/dashboard/MyInfo';
+import { ApiContextProvider } from '../Context/ApiContext';
 
 export default function Home() {
   return (
+    <ApiContextProvider>
     <PageContainer title="Chat Now!">
       <Box>
         <Grid container spacing={3}>
@@ -24,7 +26,8 @@ export default function Home() {
           </Grid>
         </Grid>
       </Box>
-    </PageContainer>
+      </PageContainer>
+      </ApiContextProvider>
   );
 }
 
